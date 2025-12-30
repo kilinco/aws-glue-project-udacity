@@ -22,8 +22,8 @@ DEFAULT_DATA_QUALITY_RULESET = """
     ]
 """
 
-# Script generated for node Accelerometer Landing
-AccelerometerLanding_node1766880474061 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="accelerometer_landing", transformation_ctx="AccelerometerLanding_node1766880474061")
+# Script generated for node Accelerometer Trusted
+AccelerometerTrusted_node1766880474061 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="accelerometer_trusted", transformation_ctx="AccelerometerTrusted_node1766880474061")
 
 # Script generated for node Customer Trusted
 CustomerTrusted_node1766880433558 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="customer_trusted", transformation_ctx="CustomerTrusted_node1766880433558")
@@ -32,7 +32,7 @@ CustomerTrusted_node1766880433558 = glueContext.create_dynamic_frame.from_catalo
 ChangeSchema_node1766960197315 = ApplyMapping.apply(frame=CustomerTrusted_node1766880433558, mappings=[("customername", "string", "customerName", "string"), ("email", "string", "email", "string"), ("phone", "string", "phone", "string"), ("birthday", "string", "birthDay", "string"), ("serialnumber", "string", "serialNumber", "string"), ("registrationdate", "long", "registrationDate", "bigint"), ("lastupdatedate", "long", "lastUpdateDate", "bigint"), ("sharewithresearchasofdate", "long", "shareWithResearchAsOfDate", "bigint"), ("sharewithpublicasofdate", "long", "shareWithPublicAsOfDate", "bigint"), ("sharewithfriendsasofdate", "long", "shareWithFriendsAsOfDate", "bigint")], transformation_ctx="ChangeSchema_node1766960197315")
 
 # Script generated for node Join
-Join_node1766958554174 = Join.apply(frame1=AccelerometerLanding_node1766880474061, frame2=ChangeSchema_node1766960197315, keys1=["user"], keys2=["email"], transformation_ctx="Join_node1766958554174")
+Join_node1766958554174 = Join.apply(frame1=AccelerometerTrusted_node1766880474061, frame2=ChangeSchema_node1766960197315, keys1=["user"], keys2=["email"], transformation_ctx="Join_node1766958554174")
 
 # Script generated for node Drop Duplicates
 DropDuplicates_node1766967306781 =  DynamicFrame.fromDF(Join_node1766958554174.toDF().dropDuplicates(["email"]), glueContext, "DropDuplicates_node1766967306781")

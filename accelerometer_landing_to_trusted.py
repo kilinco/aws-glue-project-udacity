@@ -21,16 +21,16 @@ DEFAULT_DATA_QUALITY_RULESET = """
 """
 
 # Script generated for node Accelerometer Landing
-AccelerometerLanding_node1766880474061 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="accelerometer_landing", transformation_ctx="AccelerometerLanding_node1766880474061")
+AccelerometerLanding_node1767075450818 = glueContext.create_dynamic_frame.from_options(format_options={"multiLine": "false"}, connection_type="s3", format="json", connection_options={"paths": ["s3://spark-877687662547-bucket/accelerometer/landing/"], "recurse": True}, transformation_ctx="AccelerometerLanding_node1767075450818")
 
 # Script generated for node Customer Trusted
-CustomerTrusted_node1766880433558 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="customer_trusted", transformation_ctx="CustomerTrusted_node1766880433558")
+CustomerTrusted_node1767075517537 = glueContext.create_dynamic_frame.from_options(format_options={"multiLine": "false"}, connection_type="s3", format="json", connection_options={"paths": ["s3://spark-877687662547-bucket/customer/trusted/"], "recurse": True}, transformation_ctx="CustomerTrusted_node1767075517537")
 
 # Script generated for node Change Schema
-ChangeSchema_node1766960197315 = ApplyMapping.apply(frame=CustomerTrusted_node1766880433558, mappings=[("customername", "string", "customerName", "string"), ("email", "string", "email", "string"), ("phone", "string", "phone", "string"), ("birthday", "string", "birthDay", "string"), ("serialnumber", "string", "serialNumber", "string"), ("registrationdate", "long", "registrationDate", "bigint"), ("lastupdatedate", "long", "lastUpdateDate", "bigint"), ("sharewithresearchasofdate", "long", "shareWithResearchAsOfDate", "bigint"), ("sharewithpublicasofdate", "long", "shareWithPublicAsOfDate", "bigint"), ("sharewithfriendsasofdate", "long", "shareWithFriendsAsOfDate", "bigint")], transformation_ctx="ChangeSchema_node1766960197315")
+ChangeSchema_node1766960197315 = ApplyMapping.apply(frame=CustomerTrusted_node1767075517537, mappings=[("customerName", "string", "customerName", "string"), ("email", "string", "email", "string"), ("phone", "string", "phone", "string"), ("birthDay", "string", "birthDay", "string"), ("serialNumber", "string", "serialNumber", "string"), ("registrationDate", "long", "registrationDate", "long"), ("lastUpdateDate", "long", "lastUpdateDate", "long"), ("shareWithResearchAsOfDate", "long", "shareWithResearchAsOfDate", "long"), ("shareWithPublicAsOfDate", "long", "shareWithPublicAsOfDate", "long"), ("shareWithFriendsAsOfDate", "long", "shareWithFriendsAsOfDate", "long")], transformation_ctx="ChangeSchema_node1766960197315")
 
 # Script generated for node Join
-Join_node1766958554174 = Join.apply(frame1=AccelerometerLanding_node1766880474061, frame2=ChangeSchema_node1766960197315, keys1=["user"], keys2=["email"], transformation_ctx="Join_node1766958554174")
+Join_node1766958554174 = Join.apply(frame1=ChangeSchema_node1766960197315, frame2=AccelerometerLanding_node1767075450818, keys1=["email"], keys2=["user"], transformation_ctx="Join_node1766958554174")
 
 # Script generated for node Drop Fields
 DropFields_node1766958607211 = DropFields.apply(frame=Join_node1766958554174, paths=["sharewithfriendsasofdate", "sharewithpublicasofdate", "sharewithresearchasofdate", "registrationdate", "lastupdatedate", "serialnumber", "birthday", "phone", "email", "customername", "birthDay", "serialNumber", "customerName", "registrationDate", "lastUpdateDate", "shareWithResearchAsOfDate", "shareWithPublicAsOfDate", "shareWithFriendsAsOfDate"], transformation_ctx="DropFields_node1766958607211")

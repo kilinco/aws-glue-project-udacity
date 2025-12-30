@@ -27,14 +27,14 @@ DEFAULT_DATA_QUALITY_RULESET = """
 """
 
 # Script generated for node Customer Landing Zone
-CustomerLandingZone_node1764545788286 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="customer_landing", transformation_ctx="CustomerLandingZone_node1764545788286")
+CustomerLandingZone_node1764545788286 = glueContext.create_dynamic_frame.from_options(format_options={"multiLine": "false"}, connection_type="s3", format="json", connection_options={"paths": ["s3://spark-877687662547-bucket/customer/landing/"], "recurse": True}, transformation_ctx="CustomerLandingZone_node1764545788286")
 
 # Script generated for node Customer Filter
-SqlQuery1265 = '''
+SqlQuery1535 = '''
 select * from customer_landing 
 where sharewithresearchasofdate is not null;
 '''
-CustomerFilter_node1766885200791 = sparkSqlQuery(glueContext, query = SqlQuery1265, mapping = {"customer_landing":CustomerLandingZone_node1764545788286}, transformation_ctx = "CustomerFilter_node1766885200791")
+CustomerFilter_node1766885200791 = sparkSqlQuery(glueContext, query = SqlQuery1535, mapping = {"customer_landing":CustomerLandingZone_node1764545788286}, transformation_ctx = "CustomerFilter_node1766885200791")
 
 # Script generated for node Trusted Customer Zone
 EvaluateDataQuality().process_rows(frame=CustomerFilter_node1766885200791, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1764545672152", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})

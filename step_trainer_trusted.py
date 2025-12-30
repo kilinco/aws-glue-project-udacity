@@ -26,19 +26,19 @@ DEFAULT_DATA_QUALITY_RULESET = """
     ]
 """
 
-# Script generated for node Customer Curated
-CustomerCurated_node1766968490341 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="customer_curated", transformation_ctx="CustomerCurated_node1766968490341")
-
 # Script generated for node Step Trainer Landing
-StepTrainerLanding_node1766968488707 = glueContext.create_dynamic_frame.from_catalog(database="lakehouse_db", table_name="step_trainer_landing", transformation_ctx="StepTrainerLanding_node1766968488707")
+StepTrainerLanding_node1767075698946 = glueContext.create_dynamic_frame.from_options(format_options={"multiLine": "false"}, connection_type="s3", format="json", connection_options={"paths": ["s3://spark-877687662547-bucket/step_trainer/landing/"], "recurse": True}, transformation_ctx="StepTrainerLanding_node1767075698946")
+
+# Script generated for node Customer Curated
+CustomerCurated_node1767075697484 = glueContext.create_dynamic_frame.from_options(format_options={"multiLine": "false"}, connection_type="s3", format="json", connection_options={"paths": ["s3://spark-877687662547-bucket/customer/curated/"], "recurse": True}, transformation_ctx="CustomerCurated_node1767075697484")
 
 # Script generated for node SQL Query
-SqlQuery1467 = '''
+SqlQuery1473 = '''
 select step_trainer_landing.serialnumber, distancefromobject, sensorreadingtime  
 from step_trainer_landing
 inner join customer_curated on customer_curated.serialnumber = step_trainer_landing.serialnumber
 '''
-SQLQuery_node1766986439311 = sparkSqlQuery(glueContext, query = SqlQuery1467, mapping = {"customer_curated":CustomerCurated_node1766968490341, "step_trainer_landing":StepTrainerLanding_node1766968488707}, transformation_ctx = "SQLQuery_node1766986439311")
+SQLQuery_node1766986439311 = sparkSqlQuery(glueContext, query = SqlQuery1473, mapping = {"customer_curated":CustomerCurated_node1767075697484, "step_trainer_landing":StepTrainerLanding_node1767075698946}, transformation_ctx = "SQLQuery_node1766986439311")
 
 # Script generated for node Step Trainer Trusted
 EvaluateDataQuality().process_rows(frame=SQLQuery_node1766986439311, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1766968280842", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})
